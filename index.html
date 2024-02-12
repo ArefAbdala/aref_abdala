@@ -116,11 +116,65 @@
 							</article>
 						</div>
 						<div class="col-4 col-6-medium col-12-small">
-							<article class="box style2">
-								<a href="#" class="image featured"><img src="images/pic02.jpg" alt="" /></a>
-								<h3><a href="#">Semiconductors</a></h3>
-								<p>Tough.</p>
-							</article>
+							<!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Address to Coordinates</title>
+    <script>
+        function getAddressCoordinates() {
+            // Get the address components
+            var street = document.getElementById('street').value.trim();
+            var city = document.getElementById('city').value.trim();
+            var state = document.getElementById('state').value.trim();
+
+            // Make sure the address components are not empty
+            if (street === "" || city === "" || state === "") {
+                alert("Please fill in all address components");
+                return;
+            }
+
+            // Construct the address
+            var address = street + ", " + city + ", " + state;
+
+            // Construct the URL for geocoding
+            var geocodingURL = "https://maps.googleapis.com/maps/api/geocode/json?address=" + encodeURIComponent(address) + "&key=YOUR_API_KEY";
+
+            // Send a request to the geocoding API
+            fetch(geocodingURL)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.results.length > 0) {
+                        // Get the latitude and longitude from the API response
+                        var latitude = data.results[0].geometry.location.lat;
+                        var longitude = data.results[0].geometry.location.lng;
+
+                        // Display the coordinates
+                        document.getElementById('coordinates').innerHTML = "Latitude: " + latitude + "<br>Longitude: " + longitude;
+                    } else {
+                        alert("Unable to find coordinates for the provided address");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("An error occurred while fetching data from the server");
+                });
+        }
+    </script>
+</head>
+<body>
+    <h1>Address to Coordinates</h1>
+    <label for="street">Street:</label>
+    <input type="text" id="street" placeholder="Enter street">
+    <label for="city">City:</label>
+    <input type="text" id="city" placeholder="Enter city">
+    <label for="state">State:</label>
+    <input type="text" id="state" placeholder="Enter state">
+    <button onclick="getAddressCoordinates()">Get Coordinates</button>
+    <div id="coordinates"></div>
+</body>
+	
 						</div>
 						
 					</div>
