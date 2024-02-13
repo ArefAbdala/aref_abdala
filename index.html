@@ -125,30 +125,34 @@
     <script>
         function getAddressCoordinates() {
             // Get the address components
+            var houseNumber = document.getElementById('houseNumber').value.trim();
             var street = document.getElementById('street').value.trim();
+            var postcode = document.getElementById('postcode').value.trim();
             var city = document.getElementById('city').value.trim();
-            var state = document.getElementById('state').value.trim();
+            var country = document.getElementById('country').value.trim();
 
             // Make sure the address components are not empty
-            if (street === "" || city === "" || state === "") {
+            if (houseNumber === "" || street === "" || postcode === "" || city === "" || country === "") {
                 alert("Please fill in all address components");
                 return;
             }
 
-            // Construct the address
-            var address = street + ", " + city + ", " + state;
-
             // Construct the URL for geocoding
-            var geocodingURL = "https://api.geoapify.com/v1/geocode/search?" + encodeURIComponent(address) + "b53b9da59c7c47a9a04bbd6f9a0a7e48";
+            var geocodingURL = "https://api.geoapify.com/v1/geocode/search?housenumber=" + encodeURIComponent(houseNumber) +
+                "&street=" + encodeURIComponent(street) +
+                "&postcode=" + encodeURIComponent(postcode) +
+                "&city=" + encodeURIComponent(city) +
+                "&country=" + encodeURIComponent(country) +
+                "&apiKey=YOUR_API_KEY";
 
             // Send a request to the geocoding API
             fetch(geocodingURL)
                 .then(response => response.json())
                 .then(data => {
-                    if (data.results.length > 0) {
+                    if (data.features.length > 0) {
                         // Get the latitude and longitude from the API response
-                        var latitude = data.results[0].geometry.location.lat;
-                        var longitude = data.results[0].geometry.location.lng;
+                        var latitude = data.features[0].properties.lat;
+                        var longitude = data.features[0].properties.lon;
 
                         // Display the coordinates
                         document.getElementById('coordinates').innerHTML = "Latitude: " + latitude + "<br>Longitude: " + longitude;
@@ -165,12 +169,16 @@
 </head>
 <body>
     <h1>Address to Coordinates</h1>
+    <label for="houseNumber">House Number:</label>
+    <input type="text" id="houseNumber" placeholder="Enter house number">
     <label for="street">Street:</label>
     <input type="text" id="street" placeholder="Enter street">
+    <label for="postcode">Postcode:</label>
+    <input type="text" id="postcode" placeholder="Enter postcode">
     <label for="city">City:</label>
     <input type="text" id="city" placeholder="Enter city">
-    <label for="state">State:</label>
-    <input type="text" id="state" placeholder="Enter state">
+    <label for="country">Country:</label>
+    <input type="text" id="country" placeholder="Enter country">
     <button onclick="getAddressCoordinates()">Get Coordinates</button>
     <div id="coordinates"></div>
 </body>
