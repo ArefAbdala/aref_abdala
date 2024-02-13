@@ -125,23 +125,22 @@
     <script>
         function getAddressCoordinates() {
             // Get the address components
-            var houseNumber = document.getElementById('houseNumber').value.trim();
             var street = document.getElementById('street').value.trim();
-            var postcode = document.getElementById('postcode').value.trim();
             var city = document.getElementById('city').value.trim();
+            var state = document.getElementById('state').value.trim();
             var country = document.getElementById('country').value.trim();
 
             // Make sure the address components are not empty
-            if (houseNumber === "" || street === "" || postcode === "" || city === "" || country === "") {
+            if (street === "" || city === "" || state === "" || country === "") {
                 alert("Please fill in all address components");
                 return;
             }
 
             // Construct the URL for geocoding
-            var geocodingURL = "https://api.geoapify.com/v1/geocode/search?housenumber=" + encodeURIComponent(houseNumber) +
-                "&street=" + encodeURIComponent(street) +
-                "&postcode=" + encodeURIComponent(postcode) +
+            var geocodingURL = "https://api.geoapify.com/v1/geocode/search?" +
+                "street=" + encodeURIComponent(street) +
                 "&city=" + encodeURIComponent(city) +
+                "&state=" + encodeURIComponent(state) +
                 "&country=" + encodeURIComponent(country) +
                 "&apiKey=b53b9da59c7c47a9a04bbd6f9a0a7e48";
 
@@ -169,14 +168,12 @@
 </head>
 <body>
     <h1>Address to Coordinates</h1>
-    <label for="houseNumber">House Number:</label>
-    <input type="text" id="houseNumber" placeholder="Enter house number">
-    <label for="street">Street:</label>
-    <input type="text" id="street" placeholder="Enter street">
-    <label for="postcode">Postcode:</label>
-    <input type="text" id="postcode" placeholder="Enter postcode">
+    <label for="street">Street Address:</label>
+    <input type="text" id="street" placeholder="Enter street address">
     <label for="city">City:</label>
     <input type="text" id="city" placeholder="Enter city">
+    <label for="state">State:</label>
+    <input type="text" id="state" placeholder="Enter state">
     <label for="country">Country:</label>
     <input type="text" id="country" placeholder="Enter country">
     <button onclick="getAddressCoordinates()">Get Coordinates</button>
