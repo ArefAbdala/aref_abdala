@@ -175,38 +175,9 @@
 
 <body>
    <py-script>  
-#Import packages
+
 import earthaccess
-import xarray as xr
-from netCDF4 import Dataset
-import matplotlib.pyplot as plt
-import dask
-import os
-import requests
-import numpy as np
-import pandas as pd
 
-auth = earthaccess.login(strategy="netrc")
-ProgressBar().register()
-
-from dask.diagnostics import ProgressBar
-
-results = earthaccess.search_data(short_name="MUR-JPL-L4-GLOB-v4.1",
-                                  cloud_hosted=True,
-                                  temporal = ("2023-01-01","2023-01-01"))
-earthaccess.download(results, "./MUR-yearly")
-earthaccess.download(results, "./MUR-2023")
-
-results = earthaccess.search_data(short_name="MUR-JPL-L4-GLOB-v4.1",
-                                  cloud_hosted=True,
-                                  temporal = ("2023-02-01","2023-02-01"))
-earthaccess.download(results, "./MUR-yearly")
-earthaccess.download(results, "./MUR-2023")
-
-cloud_data_yearly = xr.open_mfdataset('MUR-yearly\\*', engine='netcdf4')
-cloud_data_2023 = xr.open_mfdataset('MUR-2023\\*', engine='netcdf4')
-
-cloud_data_2023['sst_anomaly'].isel(lon=9999, lat=[11629, 11599, 11569, 11539]).plot.line(x="time")
    </py-script>
 </body>
 
